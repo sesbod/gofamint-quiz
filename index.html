@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOFAMINT Sunday School Quiz & Admin Creator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gofamint: {
+                            red: '#E32619',
+                            darkRed: '#B71C1C',
+                            purple: '#2A1D4E',
+                            darkPurple: '#1A1035',
+                            gold: '#FFB300',
+                            lightBg: '#F4F6F9'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Cinzel', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .print-card {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 min-h-screen py-4 px-2 sm:px-6 lg:px-8">
+
+    <!-- TOP CONTROL BAR (ADMIN & SWITCHER) -->
+    <div class="max-w-4xl mx-auto mb-4 bg-slate-900 text-white rounded-2xl p-4 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-gofamint-red flex items-center justify-center font-bold text-white text-sm">
+                <i class="fa-solid fa-sliders"></i>
+            </div>
+            <div>
+                <h2 class="text-sm font-bold text-amber-400">GOFAMINT Quiz Studio</h2>
+                <p class="text-xs text-slate-400" id="current-mode-label">Mode: Admin Editor (Weekly Creator)</p>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+            <button id="toggle-mode-btn" onclick="toggleAppMode()" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow">
+                <i class="fa-solid fa-eye"></i>
+                <span id="mode-btn-text">Switch to Student Preview</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER CARD -->
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden print-card">
+
+        <!-- BRAND HEADER -->
+        <header class="bg-gradient-to-r from-gofamint-darkPurple via-gofamint-purple to-gofamint-red text-white p-6 sm:p-8 text-center relative overflow-hidden">
+            <div class="relative z-10 flex flex-col items-center">
+                <!-- OFFICIAL GOFAMINT LOGO EMBLEM -->
+                <div class="w-20 h-20 sm:w-24 sm:h-24 mb-3 bg-white p-2 rounded-full shadow-lg border-2 border-amber-400 flex items-center justify-center overflow-hidden">
+                    <svg viewBox="0 0 200 200" class="w-full h-full">
+                        <path d="M100 0 C120 25 110 50 135 30 C130 65 170 55 180 95 C195 130 185 160 160 180 C135 200 65 200 40 180 C15 160 5 130 20 95 C30 55 70 65 65 30 C90 50 80 25 100 0 Z" fill="#E32619"/>
+                        <circle cx="100" cy="115" r="70" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+                        <circle cx="100" cy="115" r="64" fill="#2A1D4E"/>
+                        <path d="M52 110 C42 125 55 145 78 148 C95 150 122 142 145 125 C125 130 110 128 100 120 C95 116 88 100 68 100 C58 100 53 105 52 110 Z" fill="#FFFFFF"/>
+                        <path d="M68 100 C80 82 118 78 152 95 C120 100 100 112 90 124 C80 120 70 108 68 100 Z" fill="#FFFFFF"/>
+                    </svg>
+                </div>
+
+                <!-- TITLE & CHURCH DETAILS (Dynamic) -->
+                <h1 class="font-serif text-xl sm:text-3xl font-extrabold tracking-wide uppercase text-white drop-shadow-md" id="display-church-name">
+                    GOFAMINT OVERCOMERS ASSEMBLY
+                </h1>
+                <h2 class="text-xs sm:text-base font-semibold tracking-wider text-amber-300 mt-1 uppercase" id="display-dept-name">
+                    SUNDAY (BIBLE) SCHOOL DEPARTMENT
+                </h2>
+
+                <div class="mt-4 pt-3 border-t border-white/20 w-full max-w-xl">
+                    <span class="inline-block bg-amber-400 text-slate-950 font-bold text-xs uppercase px-3 py-1 rounded-full shadow-sm mb-2" id="display-quarter-theme">
+                        FOURTH QUARTER 2026: DISCIPLINE FOR A GLORIOUS CHURCH
+                    </span>
+                    <h3 class="text-xs sm:text-sm font-medium text-slate-100 uppercase" id="display-lesson-title">
+                        QUESTION ON LESSON 6: RESTORATIVE DISCIPLINE: A CALL TO REPENTANCE
+                    </h3>
+                    <p class="text-xs text-amber-200 mt-1 font-mono" id="display-lesson-date">Date: 12/07/2026</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 1: ADMIN EDITOR MODE (Layman Weekly Quiz Editor) -->
+        <!-- ==================================================== -->
+        <div id="admin-editor-view" class="p-6 sm:p-8 space-y-8 no-print bg-slate-50">
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-900 flex items-start gap-3">
+                <i class="fa-solid fa-lightbulb text-amber-600 text-lg mt-0.5"></i>
+                <div>
+                    <h4 class="font-bold text-sm">Layman Editor Instructions</h4>
+                    <p class="mt-0.5">Edit the lesson header details or change questions below. When finished, click <strong>"Share / Save Published Link"</strong> to copy the ready-to-use quiz URL for your class!</p>
+                </div>
+            </div>
+
+            <!-- SECTION A: HEADER & EMAIL SETTINGS -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="font-serif text-sm font-bold text-gofamint-purple uppercase flex items-center gap-2 border-b border-slate-200 pb-2">
+                    <i class="fa-solid fa-heading text-gofamint-red"></i> 1. Lesson Information & Admin Email
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Quarter / Main Theme</label>
+                        <input type="text" id="edit-quarter-theme" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-gofamint-purple outline-none" oninput="updateHeaderPreview()">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Lesson Title / Number</label>
+                        <input type="text" id="edit-lesson-title" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-gofamint-purple outline-none" oninput="updateHeaderPreview()">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Lesson Date</label>
+                        <input type="text" id="edit-lesson-date" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-gofamint-purple outline-none" oninput="updateHeaderPreview()">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Admin Email (Recieves Student Submissions)</label>
+                        <input type="email" id="edit-admin-email" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-gofamint-purple outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION B: DYNAMIC QUESTION LIST EDITOR -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                    <h3 class="font-serif text-sm font-bold text-gofamint-purple uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-list-ol text-gofamint-red"></i> 2. Weekly Questions Editor
+                    </h3>
+                    <button onclick="addNewQuestion()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition flex items-center gap-1">
+                        <i class="fa-solid fa-plus"></i> Add Question
+                    </button>
+                </div>
+
+                <!-- Container for dynamic questions -->
+                <div id="questions-editor-container" class="space-y-4"></div>
+            </div>
+
+            <!-- SECTION C: ADMIN ACTION BUTTONS -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-200">
+                <div class="flex items-center gap-2">
+                    <button onclick="exportQuizJSON()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> Save Backup (JSON)
+                    </button>
+                    <button onclick="document.getElementById('import-json-file').click()" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold rounded-xl transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-upload"></i> Load Backup
+                    </button>
+                    <input type="file" id="import-json-file" class="hidden" accept=".json" onchange="importQuizJSON(event)">
+                </div>
+
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <button onclick="generateShareableLink()" class="w-full sm:w-auto px-6 py-3 bg-gofamint-red hover:bg-red-700 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-share-nodes"></i> Share / Save Published Link
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 2: STUDENT QUIZ MODE (Interactive & Printable) -->
+        <!-- ==================================================== -->
+        <div id="student-quiz-view" class="hidden p-6 sm:p-10 space-y-8">
+            
+            <form id="student-quiz-form" action="" method="POST" onsubmit="handleStudentFormSubmit(event)" class="space-y-8">
+                <input type="hidden" name="_subject" value="GOFAMINT Sunday School Quiz Submission">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_captcha" value="false">
+
+                <!-- STUDENT & TEACHER DETAILS -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
+                    <h3 class="font-serif text-sm font-bold text-gofamint-purple uppercase flex items-center gap-2 border-b border-slate-200 pb-2">
+                        <i class="fa-solid fa-user-graduate text-gofamint-red"></i> Student Details
+                    </h3>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                        <div class="sm:col-span-2">
+                            <label class="block font-bold text-slate-700 mb-1">Student's Full Name *</label>
+                            <input type="text" name="Student_Name" required placeholder="Enter your full name" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-gofamint-purple outline-none bg-white">
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">General Superintendent Name *</label>
+                            <input type="text" name="Superintendent_Name" required placeholder="General Superintendent Name" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-gofamint-purple outline-none bg-white">
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Class Teacher Name *</label>
+                            <input type="text" name="Teacher_Name" required placeholder="Enter class teacher's name" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-gofamint-purple outline-none bg-white">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block font-bold text-slate-700 mb-1">Attendance Count (Times attended class with teacher this quarter) *</label>
+                            <input type="number" min="0" max="20" name="Attendance_Count" required placeholder="Number of times" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-gofamint-purple outline-none bg-white">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RENDERED STUDENT QUESTIONS -->
+                <div id="student-questions-container" class="space-y-6"></div>
+
+                <!-- ACTION BUTTONS FOR STUDENT MODE -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200 no-print">
+                    <button type="button" onclick="window.print()" class="w-full sm:w-auto px-6 py-3 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Print / Save as PDF</span>
+                    </button>
+
+                    <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-gofamint-purple to-gofamint-red hover:opacity-95 text-white text-sm font-bold rounded-xl transition shadow-lg shadow-purple-900/20 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Submit Answers Online</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- SUBMISSION SUCCESS MSG -->
+            <div id="success-banner" class="hidden p-6 bg-emerald-50 border-t border-emerald-200 rounded-2xl text-center space-y-2">
+                <i class="fa-solid fa-circle-check text-4xl text-emerald-600"></i>
+                <h3 class="text-lg font-bold text-emerald-900">Quiz Answers Submitted Successfully!</h3>
+                <p class="text-xs text-emerald-700">Your answers have been emailed to your Sunday School department administrator.</p>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="bg-slate-900 text-slate-400 p-6 text-center text-xs border-t border-slate-800">
+            <p>&copy; 2026 GOFAMINT Overcomers Assembly - Sunday (Bible) School Department.</p>
+        </footer>
+    </div>
+
+    <!-- JAVASCRIPT APP STATE & LOGIC -->
+    <script>
+        // DEFAULT INITIAL QUIZ DATA
+        let quizData = {
+            churchName: "GOFAMINT OVERCOMERS ASSEMBLY",
+            deptName: "SUNDAY (BIBLE) SCHOOL DEPARTMENT",
+            quarterTheme: "FOURTH QUARTER 2026: DISCIPLINE FOR A GLORIOUS CHURCH",
+            lessonTitle: "QUESTION ON LESSON 6: RESTORATIVE DISCIPLINE: A CALL TO REPENTANCE",
+            lessonDate: "12/07/2026",
+            adminEmail: "your-email@example.com",
+            questions: [
+                {
+                    type: "text",
+                    prompt: "Complete the missing words and cite the Bible verse: ....., if a man is overtaken in ....., trespass, you who are ....., restore such a ....., in a spirit of gentleness, considering yourself lest you also be ....."
+                },
+                {
+                    type: "text",
+                    prompt: "How many times altogether does the word 'DISCIPLINE' appear on all the pages of the texts in the adult manual? (from page 118 – 122)"
+                },
+                {
+                    type: "true_false",
+                    prompt: "Say whether TRUE or FALSE according to notes and scriptures:",
+                    options: [
+                        "We must condemn any sinner to death.",
+                        "When you repent from your sin, you shame the devil.",
+                        "Every secret sin is an open scandal unto God.",
+                        "Restorative discipline is about correction or punishment only."
+                    ]
+                },
+                {
+                    type: "text",
+                    prompt: "In your own understanding, what is Restorative?"
+                },
+                {
+                    type: "text",
+                    prompt: "According to notes used in the lesson, in what ways can a church share the burden of discipline with the concerned brethren?"
+                },
+                {
+                    type: "text",
+                    prompt: "According to the notes used in the lesson, mention at least four Bible characters who experienced godly sorrow."
+                },
+                {
+                    type: "text",
+                    prompt: "According to notes used in the lesson:\nA. Godly _____, produces _____\nB. Godly _____, is a deep _____, and remorse for one's sin.\nC. Do not _____, the love of God"
+                }
+            ]
+        };
+
+        let currentMode = "admin"; // 'admin' or 'student'
+
+        // INITIALIZE ON LOAD
+        window.onload = function() {
+            // Check if URL hash contains published quiz data
+            if (window.location.hash && window.location.hash.length > 5) {
+                try {
+                    const encodedData = window.location.hash.substring(1);
+                    const decodedStr = decodeURIComponent(escape(atob(encodedData)));
+                    quizData = JSON.parse(decodedStr);
+                    currentMode = "student"; // Default to student view if opened via hash link
+                } catch (e) {
+                    console.error("Could not parse hash data, loading default/saved data", e);
+                }
+            } else {
+                // Check localStorage
+                const saved = localStorage.getItem("gofamint_quiz_data");
+                if (saved) {
+                    try { quizData = JSON.parse(saved); } catch(e){}
+                }
+            }
+
+            populateAdminFields();
+            updateHeaderPreview();
+            renderAdminQuestionsEditor();
+            renderStudentQuestions();
+            applyModeUI();
+        };
+
+        // MODE SWITCHER LOGIC
+        function toggleAppMode() {
+            currentMode = (currentMode === "admin") ? "student" : "admin";
+            if (currentMode === "student") {
+                saveAdminInputsToState();
+                renderStudentQuestions();
+            }
+            applyModeUI();
+        }
+
+        function applyModeUI() {
+            const adminView = document.getElementById("admin-editor-view");
+            const studentView = document.getElementById("student-quiz-view");
+            const modeLabel = document.getElementById("current-mode-label");
+            const btnText = document.getElementById("mode-btn-text");
+
+            if (currentMode === "admin") {
+                adminView.classList.remove("hidden");
+                studentView.classList.add("hidden");
+                modeLabel.innerText = "Mode: Admin Editor (Weekly Creator)";
+                btnText.innerText = "Switch to Student View";
+            } else {
+                adminView.classList.add("hidden");
+                studentView.classList.remove("hidden");
+                modeLabel.innerText = "Mode: Student Interactive View";
+                btnText.innerText = "Switch to Admin Editor";
+            }
+        }
+
+        // HEADER PREVIEW UPDATE
+        function updateHeaderPreview() {
+            document.getElementById("display-quarter-theme").innerText = document.getElementById("edit-quarter-theme")?.value || quizData.quarterTheme;
+            document.getElementById("display-lesson-title").innerText = document.getElementById("edit-lesson-title")?.value || quizData.lessonTitle;
+            document.getElementById("display-lesson-date").innerText = "Date: " + (document.getElementById("edit-lesson-date")?.value || quizData.lessonDate);
+        }
+
+        function populateAdminFields() {
+            document.getElementById("edit-quarter-theme").value = quizData.quarterTheme;
+            document.getElementById("edit-lesson-title").value = quizData.lessonTitle;
+            document.getElementById("edit-lesson-date").value = quizData.lessonDate;
+            document.getElementById("edit-admin-email").value = quizData.adminEmail;
+        }
+
+        function saveAdminInputsToState() {
+            quizData.quarterTheme = document.getElementById("edit-quarter-theme").value;
+            quizData.lessonTitle = document.getElementById("edit-lesson-title").value;
+            quizData.lessonDate = document.getElementById("edit-lesson-date").value;
+            quizData.adminEmail = document.getElementById("edit-admin-email").value;
+
+            // Save question prompts from admin DOM
+            const items = document.querySelectorAll(".admin-q-card");
+            quizData.questions = [];
+            items.forEach((item) => {
+                const type = item.querySelector(".q-type-select").value;
+                const prompt = item.querySelector(".q-prompt-input").value;
+                if (type === "true_false") {
+                    const optionInputs = item.querySelectorAll(".tf-option-input");
+                    const options = Array.from(optionInputs).map(inp => inp.value);
+                    quizData.questions.push({ type, prompt, options });
+                } else {
+                    quizData.questions.push({ type, prompt });
+                }
+            });
+
+            localStorage.setItem("gofamint_quiz_data", JSON.stringify(quizData));
+        }
+
+        // RENDER ADMIN QUESTION EDITOR
+        function renderAdminQuestionsEditor() {
+            const container = document.getElementById("questions-editor-container");
+            container.innerHTML = "";
+
+            quizData.questions.forEach((q, idx) => {
+                const card = document.createElement("div");
+                card.className = "admin-q-card bg-slate-50 p-4 rounded-xl border border-slate-300 space-y-3 relative";
+
+                let optionsHtml = "";
+                if (q.type === "true_false" && q.options) {
+                    optionsHtml = `<div class="space-y-2 pt-2 border-t border-slate-200">
+                        <label class="block text-xs font-bold text-slate-600">Sub-statements (True/False items):</label>
+                        ${q.options.map((opt, oIdx) => `
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-400">(${String.fromCharCode(97 + oIdx)})</span>
+                                <input type="text" class="tf-option-input w-full px-3 py-1.5 text-xs rounded-lg border border-slate-300 bg-white" value="${escapeHtml(opt)}">
+                                <button type="button" onclick="removeTFOption(${idx}, ${oIdx})" class="text-red-500 hover:text-red-700 text-xs px-2"><i class="fa-solid fa-times"></i></button>
+                            </div>
+                        `).join('')}
+                        <button type="button" onclick="addTFOption(${idx})" class="text-xs text-gofamint-purple font-bold hover:underline">+ Add Sub-statement</button>
+                    </div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-bold text-xs text-gofamint-purple">Question #${idx + 1}</span>
+                        <div class="flex items-center gap-2">
+                            <select class="q-type-select px-3 py-1 text-xs rounded-lg border border-slate-300 bg-white font-semibold" onchange="saveAdminInputsToState(); renderAdminQuestionsEditor();">
+                                <option value="text" ${q.type === 'text' ? 'selected' : ''}>Text / Write Answer</option>
+                                <option value="true_false" ${q.type === 'true_false' ? 'selected' : ''}>True / False List</option>
+                            </select>
+                            <button onclick="removeQuestion(${idx})" class="p-1.5 text-red-600 hover:bg-red-50 rounded-lg text-xs"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Question Prompt</label>
+                        <textarea class="q-prompt-input w-full px-3 py-2 text-xs rounded-lg border border-slate-300 bg-white outline-none focus:ring-2 focus:ring-gofamint-purple" rows="2">${escapeHtml(q.prompt)}</textarea>
+                    </div>
+                    ${optionsHtml}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function addNewQuestion() {
+            saveAdminInputsToState();
+            quizData.questions.push({
+                type: "text",
+                prompt: "New question prompt here..."
+            });
+            renderAdminQuestionsEditor();
+        }
+
+        function removeQuestion(index) {
+            saveAdminInputsToState();
+            quizData.questions.splice(index, 1);
+            renderAdminQuestionsEditor();
+        }
+
+        function addTFOption(qIndex) {
+            saveAdminInputsToState();
+            if (!quizData.questions[qIndex].options) quizData.questions[qIndex].options = [];
+            quizData.questions[qIndex].options.push("New True/False statement");
+            renderAdminQuestionsEditor();
+        }
+
+        function removeTFOption(qIndex, oIndex) {
+            saveAdminInputsToState();
+            quizData.questions[qIndex].options.splice(oIndex, 1);
+            renderAdminQuestionsEditor();
+        }
+
+        // RENDER STUDENT QUIZ VIEW
+        function renderStudentQuestions() {
+            const container = document.getElementById("student-questions-container");
+            const form = document.getElementById("student-quiz-form");
+            form.action = "https://formsubmit.co/" + encodeURIComponent(quizData.adminEmail || 'your-email@example.com');
+            container.innerHTML = "";
+
+            quizData.questions.forEach((q, idx) => {
+                const box = document.createElement("div");
+                box.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3";
+
+                if (q.type === "true_false" && q.options) {
+                    let itemsHtml = q.options.map((opt, oIdx) => `
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 gap-2 text-xs sm:text-sm">
+                            <span class="font-medium text-slate-800">(${String.fromCharCode(97 + oIdx)}) ${escapeHtml(opt)}</span>
+                            <div class="flex items-center gap-4 shrink-0 font-bold">
+                                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                                    <input type="radio" name="Q${idx + 1}_Opt_${oIdx + 1}" value="TRUE" required class="text-gofamint-purple focus:ring-gofamint-purple"> True
+                                </label>
+                                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                                    <input type="radio" name="Q${idx + 1}_Opt_${oIdx + 1}" value="FALSE" class="text-gofamint-purple focus:ring-gofamint-purple"> False
+                                </label>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    box.innerHTML = `
+                        <h4 class="font-serif text-sm font-bold text-gofamint-purple uppercase flex items-center gap-2 border-b border-slate-100 pb-2">
+                            <span class="w-6 h-6 rounded-full bg-gofamint-red text-white flex items-center justify-center text-xs font-sans">${idx + 1}</span>
+                            <span>${escapeHtml(q.prompt)}</span>
+                        </h4>
+                        <div class="space-y-2 pt-2">${itemsHtml}</div>
+                    `;
+                } else {
+                    box.innerHTML = `
+                        <h4 class="font-serif text-sm font-bold text-gofamint-purple uppercase flex items-center gap-2 border-b border-slate-100 pb-2">
+                            <span class="w-6 h-6 rounded-full bg-gofamint-red text-white flex items-center justify-center text-xs font-sans">${idx + 1}</span>
+                            <span>Question ${idx + 1}</span>
+                        </h4>
+                        <p class="text-xs sm:text-sm font-medium text-slate-800 whitespace-pre-line leading-relaxed">${escapeHtml(q.prompt)}</p>
+                        <textarea name="Answer_Q${idx + 1}" rows="3" required placeholder="Type your answer here..." class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-gofamint-purple outline-none"></textarea>
+                    `;
+                }
+
+                container.appendChild(box);
+            });
+        }
+
+        // SHARE & EXPORT LOGIC
+        function generateShareableLink() {
+            saveAdminInputsToState();
+            const jsonStr = JSON.stringify(quizData);
+            const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+            const fullUrl = window.location.origin + window.location.pathname + "#" + encoded;
+
+            navigator.clipboard.writeText(fullUrl).then(() => {
+                alert("SUCCESS!\n\nA direct, shareable Quiz Link has been copied to your clipboard!\n\nYou can now send this link via WhatsApp or Email to teachers and students.");
+            }).catch(() => {
+                prompt("Copy this URL to share your published quiz:", fullUrl);
+            });
+        }
+
+        function exportQuizJSON() {
+            saveAdminInputsToState();
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(quizData, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `GOFAMINT_Quiz_${quizData.lessonDate.replace(/\//g, '-')}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        }
+
+        function importQuizJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    quizData = JSON.parse(e.target.result);
+                    populateAdminFields();
+                    updateHeaderPreview();
+                    renderAdminQuestionsEditor();
+                    renderStudentQuestions();
+                    alert("Quiz template loaded successfully!");
+                } catch(err) {
+                    alert("Invalid JSON template file.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function handleStudentFormSubmit(event) {
+            document.getElementById('success-banner').classList.remove('hidden');
+        }
+
+        function escapeHtml(text) {
+            if (!text) return "";
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
